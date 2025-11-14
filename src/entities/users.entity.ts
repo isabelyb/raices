@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, OneToOne, ManyToMany, JoinTable } from "typeorm";
+import { CredentialsEntity } from './credentials.entity';
+import { Legends } from './legends.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -61,6 +63,13 @@ export class User {
   })
   createdAt: Date;
 
+  // Relaciones
+  @OneToOne(() => CredentialsEntity, credential => credential.user)
+  credential: CredentialsEntity;
+
+  @ManyToMany(() => Legends)
+  @JoinTable({ name: 'user_favorites' })
+  favorites: Legends[];
 
 }
 
