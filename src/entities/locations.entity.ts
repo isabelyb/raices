@@ -1,8 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Legends } from './legends.entity';
 
-@Entity({ name: 'categories' })
-export class Categories {
+@Entity({ name: 'locations' })
+export class Locations {
   @PrimaryGeneratedColumn('uuid')
   uuid: string;
 
@@ -15,19 +15,25 @@ export class Categories {
 
   @Column({
     type: 'varchar',
-    length: 1000,
+    length: 100,
     nullable: false,
-
   })
-  description: string;
+  department: string;
 
   @Column({
-    type:'boolean',
+    type: 'text',
+    nullable: true,
+  })
+  touristInfo: string;
+
+  @Column({
+    type: 'boolean',
     default: true,
   })
   isActive: boolean;
 
   // Relaciones
-  @OneToMany(() => Legends, legend => legend.category)
+  @OneToMany(() => Legends, legend => legend.location)
   legends: Legends[];
 }
+

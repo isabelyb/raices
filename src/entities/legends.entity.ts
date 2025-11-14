@@ -1,4 +1,6 @@
-import { PrimaryGeneratedColumn, Entity, Column } from "typeorm";
+import { PrimaryGeneratedColumn, Entity, Column, ManyToOne } from "typeorm";
+import { Categories } from './categories.entity';
+import { Locations } from './locations.entity';
 
 @Entity('legends')
 export class Legends{
@@ -51,8 +53,11 @@ export class Legends{
     })
     createdAt: Date;
 
+    // Relaciones
+    @ManyToOne(() => Categories, category => category.legends)
+    category: Categories;
 
-    
-    
+    @ManyToOne(() => Locations, location => location.legends)
+    location: Locations;
 
 }
