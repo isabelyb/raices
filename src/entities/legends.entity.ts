@@ -28,8 +28,7 @@ export class Legends{
     imageUrl: string;
 
     @Column({
-        type: 'varchar',
-        length: 100000000,
+        type: 'text', // Tipo text para historias largas (sin límite de caracteres)
         nullable: false
     })
     story: string;
@@ -45,7 +44,7 @@ export class Legends{
         type: 'boolean',
         default: true
     })
-    isActivate: boolean;
+    isActive: boolean; // Consistente con otras entities
 
     @Column({
     type: 'timestamp',
