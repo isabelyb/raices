@@ -64,8 +64,8 @@ export class User {
   createdAt: Date;
 
   // Relaciones
-  @OneToOne(() => CredentialsEntity, credential => credential.user)
-  credential: CredentialsEntity;
+  //@OneToOne(() => CredentialsEntity, credential => credential.user)
+  //credential: CredentialsEntity;
 
   @ManyToMany(() => Legends)
   @JoinTable({ name: 'user_favorites' })
