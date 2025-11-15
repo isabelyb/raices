@@ -10,6 +10,7 @@ export class Legends{
     @Column({
         type: 'text',
         nullable: false,
+        unique: true,
     })
     title: string
 
@@ -18,12 +19,13 @@ export class Legends{
         length: 350,
         nullable: false
     })
-    description: string
+    description: string;
 
     @Column({
         type: 'varchar',
         length: 200,
-        nullable: false
+        nullable: false,
+        unique: true,
     })
     imageUrl: string;
 
