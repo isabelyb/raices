@@ -12,6 +12,10 @@ API REST para preservar y difundir mitos, leyendas e historias locales de difere
 - Isa Y.
 - Isa E.
 
+## Modelo Entidad-Relación (MER)
+
+![MER - Raíces Ancestrales](Docs/MER.png)
+
 ## Tecnologías
 - **Backend:** NestJS, TypeORM
 - **Base de Datos:** PostgreSQL
@@ -46,3 +50,7 @@ src/
 ├── config/         # Configuración de TypeORM
 └── main.ts         # Entry point
 ```
+
+## Endpoints
+
+Para ver la lista completa de endpoints disponibles, consulta la [documentación de endpoints](Docs/ENDPOINTS.md).
