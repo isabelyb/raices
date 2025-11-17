@@ -1,5 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { Role } from "../enums/roles.enum";
+
+import { Role } from 'src/enums/roles.enum';
+import { User } from './users.entity';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({name:'credentials'})
 export class CredentialsEntity {
@@ -33,5 +35,9 @@ export class CredentialsEntity {
    })
    isActive: boolean;
 
+   // Relaciones
+   @OneToOne(() => User, user => user.credential, { onDelete: 'CASCADE' })
+   @JoinColumn()
+   user: User;
 
 }

@@ -14,7 +14,7 @@ const config: DataSourceOptions = {
   entities: ['dist/**/*.entity.js'],
   migrations: ['dist/migrations/*.js'],
   logging: false,
-  synchronize: false,
+  synchronize: true, // ⚠️ Solo para desarrollo - TypeORM crea/actualiza tablas automáticamente
   dropSchema: false,
   migrationsTableName: 'migrations_history',
 };
