@@ -11,7 +11,25 @@ export class UsersRepository extends Repository<User> {
   async findUserByUuid(uuid: string) {
     return await this.findOne({
       where: { uuid },
-      relations: ['favorites'],
+      relations: ['favorites', 'credential'],
     });
+  }
+
+  async getUserByEmail(email: string) {
+    return await this.findOne({
+      where: { email },
+    });
+  }
+
+  async getUserById(uuid: string) {
+    return await this.findOne({
+      where: { uuid },
+      relations: ['favorites', 'credential'],
+    });
+  }
+
+  async createUser(userData: Partial<User>) {
+    const user = this.create(userData);
+    return await this.save(user);
   }
 }

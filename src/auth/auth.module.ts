@@ -5,15 +5,13 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './Guards/auth.guard';
 import { RolesGuard } from './Guards/roles.guard';
-// TODO: Descomentar cuando módulos estén listos (Personas 1 y 2)
-// import { UsersModule } from 'src/users/users.module';
-// import { CredentialsModule } from 'src/credentials/credentials.module';
+import { UsersModule } from 'src/users/users.module';
+import { CredentialsModule } from 'src/credentials/credentials.module';
 
 @Module({
   imports: [
-    // TODO: Descomentar cuando módulos estén listos
-    // UsersModule,
-    // CredentialsModule,
+    UsersModule,
+    CredentialsModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

@@ -32,6 +32,15 @@ export class CredentialsRepository {
     return this.credentialsRepo.save(credentials);
   }
 
+  async createCredentials(createDto: Partial<CredentialsEntity>): Promise<CredentialsEntity> {
+    const credentials = this.credentialsRepo.create(createDto);
+    return this.credentialsRepo.save(credentials);
+  }
+
+  async getUserByUsername(username: string): Promise<CredentialsEntity | null> {
+    return this.credentialsRepo.findOne({ where: { username, isActive: true }, relations: ['user'] });
+  }
+
   async update(uuid: string, updateDto: Partial<CredentialsEntity>): Promise<CredentialsEntity> {
     const credentials = await this.getById(uuid);
     if (!credentials) throw new NotFoundException('Credenciales no encontradas');
