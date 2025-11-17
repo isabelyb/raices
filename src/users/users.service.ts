@@ -5,7 +5,6 @@ import { UpdateUserDto } from './Dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Legends } from '../entities/legends.entity';
 import { Repository } from 'typeorm';
-import { CredentialsEntity } from 'src/entities/credential.entity';
 
 @Injectable()
 export class UsersService {
@@ -14,9 +13,6 @@ export class UsersService {
 
     @InjectRepository(Legends)
     private readonly legendsRepo: Repository<Legends>,
-
-        @InjectRepository(CredentialsEntity)
-        private readonly credentialDataBase: Repository<CredentialsEntity>,
   ) {}
 
   // CREATE
