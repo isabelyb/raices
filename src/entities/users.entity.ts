@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToOne, ManyToMany, JoinTable } from "typeorm";
-import { CredentialsEntity } from './credentials.entity';
+import { CredentialsEntity } from './credential.entity';
 import { Legends } from './legends.entity';
 
 @Entity({ name: 'users' })
@@ -30,7 +30,7 @@ export class User {
     length: 15,
     nullable: true,
   })
-  Phone: string;
+  phone: string;
 
 
     @Column({
@@ -48,7 +48,7 @@ export class User {
     unique: false,
     nullable: false,
   })
-  Location: string;
+  location: string;
 
 
   @Column({
@@ -70,6 +70,7 @@ export class User {
   @ManyToMany(() => Legends)
   @JoinTable({ name: 'user_favorites' })
   favorites: Legends[];
+     credential: any;
 
 }
 
