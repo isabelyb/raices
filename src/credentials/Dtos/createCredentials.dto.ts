@@ -11,7 +11,7 @@ export class createCredentialsDto {
         message: 'El nombre de usuario solo puede contener letras, números y guiones bajos'
     })
     
-    user_name: string;
+    username: string;
 
     @IsNotEmpty({ message: 'La contraseña es requerida' })
     @IsString({ message: 'La contraseña debe ser una cadena de caracteres' })
@@ -28,7 +28,7 @@ export class createCredentialsDto {
     role: Role;
       @IsOptional()
      @IsBoolean({ message: 'El estado activo debe ser un valor booleano' })
-    is_active: boolean;
+     isActive: boolean;
 
       @IsNotEmpty({ message: 'El ID del usuario es requerido' })
       @IsUUID('4', { message: 'El ID del usuario debe ser un UUID válido' })

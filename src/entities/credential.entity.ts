@@ -1,9 +1,10 @@
 
 import { Role } from 'src/enums/roles.enum';
-import { User } from './users.entity';
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({name:'credentials'})
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from './users.entity';
+
+@Entity({name:'credential'})
 export class CredentialsEntity {
    @PrimaryGeneratedColumn('uuid')
    uuid: string;
@@ -14,7 +15,7 @@ export class CredentialsEntity {
         unique: true,
         nullable: false
    })
-   userName: string;
+   username: string;
     @Column({
         type: 'varchar',
         length: 100,
@@ -34,6 +35,12 @@ export class CredentialsEntity {
         default: true
    })
    isActive: boolean;
+
+       @Column({
+        type: 'timestamp',
+        default: () => 'CURRENT_TIMESTAMP'
+    })
+    createAt: Date; 
 
    // Relaciones
    @OneToOne(() => User, user => user.credential, { onDelete: 'CASCADE' })
