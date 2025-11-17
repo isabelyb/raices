@@ -13,6 +13,6 @@ import { UsersModule } from 'src/users/users.module';
   imports: [TypeOrmModule.forFeature([CredentialsEntity,User]), UsersModule],
   providers: [CredentialsService, CredentialsRepository],
   controllers: [CredentialsController, CredentialsRepository],
-  exports:[TypeOrmModule]
+  exports:[TypeOrmModule, CredentialsService, CredentialsRepository]
 })
 export class CredentialsModule {}

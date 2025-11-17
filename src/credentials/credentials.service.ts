@@ -1,43 +1,63 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { CredentialsRepository } from './credentials.repository';
 import { createCredentialsDto } from './Dtos/createCredentials.dto';
 import { UpdateCredentialsDto } from './Dtos/updateCredentials.dto';
-import { CredentialsRepository } from './credentials.repository';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class CredentialsService {
-  constructor(
-    private readonly credentialsRepository: CredentialsRepository
-  ) {}
+  constructor(private readonly credentialsRepository: CredentialsRepository) {}
 
-  async createCredentialsServices(createCredentialsDto: createCredentialsDto) {
-    const usernameExists = await this.credentialsRepository.usernameExists(createCredentialsDto.username);
-
+  // Crear credenciales
+  async createCredentials(createDto: createCredentialsDto) {
+    const usernameExists = await this.credentialsRepository.usernameExists(createDto.username);
     if (usernameExists) {
-      throw new ConflictException('Ya existen credenciales registradas con este nombre de usuario');
+      throw new ConflictException('Ya existe un usuario con este nombre de usuario');
     }
 
-    return this.credentialsRepository.create(createCredentialsDto);
+    // Encriptar contraseña
+    const hashedPassword = await bcrypt.hash(createDto.password, 10);
+
+    return this.credentialsRepository.create({
+      ...createDto,
+      password: hashedPassword,
+    });
   }
 
-  async updateCredentialsService(uuid: string, updateCredencialesDto: UpdateCredentialsDto) {
-    const credentialsExisting = await this.credentialsRepository.getById(uuid);
-    if (!credentialsExisting) throw new NotFoundException('Estas credenciales no existen');
+  // Actualizar credenciales
+  async updateCredentials(uuid: string, updateDto: UpdateCredentialsDto) {
+    const existing = await this.credentialsRepository.getById(uuid);
+    if (!existing) throw new NotFoundException('Credenciales no encontradas');
 
-    return this.credentialsRepository.update(uuid, updateCredencialesDto);
+    if (updateDto.password) {
+      updateDto.password = await bcrypt.hash(updateDto.password, 10);
+    }
+
+    return this.credentialsRepository.update(uuid, updateDto);
   }
 
-  async deleteCredentialsService(uuid: string) {
-    const credentialsExisting = await this.credentialsRepository.getById(uuid);
-    if (!credentialsExisting) throw new NotFoundException('Estas credenciales no existen');
-    if (!credentialsExisting.isActive) throw new BadRequestException('Estas credenciales ya están desactivadas');
+  async deleteCredentials(uuid: string) {
+    const existing = await this.credentialsRepository.getById(uuid);
+    if (!existing) throw new NotFoundException('Credenciales no encontradas');
+    if (!existing.isActive) throw new BadRequestException('Ya están desactivadas');
 
     return this.credentialsRepository.softDelete(uuid);
   }
 
-  async reactivateCredentialsService(uuid: string) {
-    const credentialsExisting = await this.credentialsRepository.getById(uuid);
-    if (!credentialsExisting) throw new NotFoundException('Estas credenciales no existen');
+  async reactivateCredentials(uuid: string) {
+    const existing = await this.credentialsRepository.getById(uuid);
+    if (!existing) throw new NotFoundException('Credenciales no encontradas');
 
     return this.credentialsRepository.reactivate(uuid);
+  }
+
+  async verifyCredentials(username: string, password: string) {
+    const credentials = await this.credentialsRepository.getByUsername(username);
+    if (!credentials) return null;
+
+    const valid = await bcrypt.compare(password, credentials.password);
+    if (!valid) return null;
+
+    return credentials;
   }
 }
