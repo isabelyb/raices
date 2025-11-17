@@ -1,0 +1,79 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { UsersRepository } from './users.repository';
+import { CreateUserDto } from './Dto/create-user.dto';
+import { UpdateUserDto } from './Dto/update-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Legends } from '../entities/legends.entity';
+import { Repository } from 'typeorm';
+
+@Injectable()
+export class UsersService {
+  constructor(
+    private readonly usersRepo: UsersRepository,
+
+    @InjectRepository(Legends)
+    private readonly legendsRepo: Repository<Legends>,
+  ) {}
+
+  // CREATE
+  async create(dto: CreateUserDto) {
+    const user = this.usersRepo.create(dto);
+    return await this.usersRepo.save(user);
+  }
+
+  // FIND ALL
+  async findAll() {
+    return await this.usersRepo.find();
+  }
+
+  // FIND ONE
+  async findOne(uuid: string) {
+    const user = await this.usersRepo.findUserByUuid(uuid);
+    if (!user) throw new NotFoundException(`User with id ${uuid} not found`);
+    return user;
+  }
+
+  // UPDATE
+  async update(uuid: string, dto: UpdateUserDto) {
+    const user = await this.findOne(uuid);
+    Object.assign(user, dto);
+    return await this.usersRepo.save(user);
+  }
+
+  // SOFT DELETE
+  async softDelete(uuid: string) {
+    await this.findOne(uuid);
+    await this.usersRepo.softDelete({ uuid });
+    return { message: 'User soft-deleted successfully' };
+  }
+
+  // FAVORITES - GET
+  async getFavorites(uuid: string) {
+    const user = await this.findOne(uuid);
+    return user.favorites;
+  }
+
+  // FAVORITES - ADD
+  async addFavorite(uuid: string, legendId: string) {
+    const user = await this.findOne(uuid);
+
+    const legend = await this.legendsRepo.findOne({
+      where: { uuid: legendId },
+    });
+
+    if (!legend) throw new NotFoundException('Legend not found');
+
+    user.favorites.push(legend);
+    return await this.usersRepo.save(user);
+  }
+
+  // FAVORITES - REMOVE
+  async removeFavorite(uuid: string, legendId: string) {
+    const user = await this.findOne(uuid);
+
+    user.favorites = user.favorites.filter(f => f.uuid !== legendId);
+
+    await this.usersRepo.save(user);
+    return { message: 'Favorite removed successfully' };
+  }
+}

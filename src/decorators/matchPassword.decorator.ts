@@ -22,4 +22,3 @@ export class MatchPassword implements ValidatorConstraintInterface {
     return 'Las contraseñas no coinciden';
   }
 }
-
