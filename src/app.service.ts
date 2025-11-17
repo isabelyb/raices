@@ -53,7 +53,7 @@ export class AppService {
           <img src="/logo.png" alt="Logo Raíces Ancestrales" />
           <h1>API Mitos y Leyendas</h1>
           <h2>Raíces Ancestrales</h2>
-          <p>Preservando la cultura de Colombia 🇨🇴</p>
+          <p>Preservando la cultura de Colombia</p>
           <p><a href="/api">📚 Ver documentación (Swagger)</a></p>
         </body>
       </html>
