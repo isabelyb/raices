@@ -3,6 +3,9 @@ import { config as dotenvConfig } from 'dotenv';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
 dotenvConfig({ path: '.env.development' });
+console.log("DEBUG ENV FILE >>>");
+console.log("DB_NAME:", process.env.DB_NAME);
+console.log("DB_PASSWORD:", JSON.stringify(process.env.DB_PASSWORD));
 
 const config: DataSourceOptions = {
   type: 'postgres',
