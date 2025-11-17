@@ -12,7 +12,7 @@ import { UsersModule } from 'src/users/users.module';
 @Module({
   imports: [TypeOrmModule.forFeature([CredentialsEntity,User]), UsersModule],
   providers: [CredentialsService, CredentialsRepository],
-  controllers: [CredentialsController, CredentialsRepository],
+  controllers: [CredentialsController],
   exports:[TypeOrmModule, CredentialsService, CredentialsRepository]
 })
 export class CredentialsModule {}

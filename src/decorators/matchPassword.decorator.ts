@@ -10,17 +10,15 @@ import {
 })
 export class MatchPassword implements ValidatorConstraintInterface {
   validate(
-    password: any,
+    value: any,
     args: ValidationArguments,
   ): Promise<boolean> | boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    if (password !== (args.object as any)[args.constraints[0]]) {
-      return false;
-    }
-    return true;
+    const [relatedPropertyName] = args.constraints;
+    const relatedValue = (args.object as any)[relatedPropertyName];
+    return value === relatedValue;
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   defaultMessage(args?: ValidationArguments): string {
-    return 'El password y la confirmacion de password son diferentes';
+    return 'Las contraseñas no coinciden';
   }
 }

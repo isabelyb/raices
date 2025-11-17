@@ -22,10 +22,11 @@ export class CategoriesRepository {
          where: { name: name } 
         });
   }
-  //metodo para crear una categoria
   async createCategoryRepository(createCategoryDto: CreateCategoryDto) {
     const newCategory = this.categoryDataBase.create({
       name: createCategoryDto.name,
+      description: createCategoryDto.description,
+      isActive: true,
     });
     return await this.categoryDataBase.save(newCategory);
   }
@@ -34,16 +35,22 @@ export class CategoriesRepository {
     return await this.categoryDataBase.findOne({ where: { uuid: id } });
   }
 
-  //metodo para actualizar una categoria
   async updateRepository(
     categoryToUpdate: Categories,
     updateCategoryDto: UpdateCategoryDto,
   ) {
-    categoryToUpdate.name =
-      updateCategoryDto.name || categoryToUpdate.name;
-    await this.categoryDataBase.save(categoryToUpdate);
-    return 'Categoria actualizada exitosamente';
+    if (updateCategoryDto.name) {
+      categoryToUpdate.name = updateCategoryDto.name;
+    }
+    if (updateCategoryDto.description) {
+      categoryToUpdate.description = updateCategoryDto.description;
+    }
+    return await this.categoryDataBase.save(categoryToUpdate);
   }
 
-
+  async softDeleteRepository(category: Categories) {
+    category.isActive = false;
+    await this.categoryDataBase.save(category);
+    return { message: 'Categoría desactivada exitosamente' };
+  }
 }

@@ -29,6 +29,7 @@ export class User {
     type: 'varchar',
     length: 15,
     nullable: true,
+    name: 'phone'
   })
   phone: string;
 
@@ -64,13 +65,12 @@ export class User {
   createdAt: Date;
 
   // Relaciones
-  //@OneToOne(() => CredentialsEntity, credential => credential.user)
-  //credential: CredentialsEntity;
+  @OneToOne(() => CredentialsEntity, credential => credential.user)
+  credential: CredentialsEntity;
 
   @ManyToMany(() => Legends)
   @JoinTable({ name: 'user_favorites' })
   favorites: Legends[];
-     credential: any;
 
 }
 
