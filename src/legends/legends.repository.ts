@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import {Legends} from "../entities/legends.entity";
-import { Repository, Like } from "typeorm";
+import { Repository, ILike } from "typeorm";
 import {CreateLegendsDto} from './Dto/createLegends.dto';
 import {UpdateLegendsDto} from './Dto/updateLegends.dto';
 
@@ -27,7 +27,7 @@ export class LegendsRepository{
     
     async getLegendByTitleRepository(title: string){
         return this.legendsDataBase.find({
-            where: {title: Like(`%${title}%`)},
+            where: {title: ILike(`%${title}%`)},
             relations: ['category', 'location']
         })
     }
