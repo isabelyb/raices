@@ -8,6 +8,7 @@ import {Legends} from '../entities/legends.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Legends])],
   controllers: [LegendsController],
-  providers: [LegendsService, LegendsRepository]
+  providers: [LegendsService, LegendsRepository],
+  exports: [TypeOrmModule, LegendsService, LegendsRepository],
 })
 export class LegendsModule {}

@@ -1,38 +1,61 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CategoriesRepository } from './categories.repository';
 import { CreateCategoryDto } from './Dtos/createCategory.dto';
 import { UpdateCategoryDto } from './Dtos/updateCategory.dto';
 
 @Injectable()
 export class CategoriesService {
-    constructor (private readonly categoriesRepository: CategoriesRepository) {}
-    // Servicio para obtener todas las categorias
-    findAllServices() {
-        return this.categoriesRepository.findAllRepository();
+  constructor(private readonly categoriesRepository: CategoriesRepository) {}
+
+  findAll() {
+    return this.categoriesRepository.findAllRepository();
+  }
+
+  async findOne(id: string) {
+    const category = await this.categoriesRepository.findByIdRepository(id);
+    if (!category) {
+      throw new NotFoundException('Categoría no encontrada');
     }
-    // Servicio para crear una categoria
-    async createCategory(CreateCategoryDto: CreateCategoryDto) {
-        const categoryExists =await this.categoriesRepository.findByNameRepository(
-            CreateCategoryDto.name,
-        );
-        if (categoryExists){
-            throw new ConflictException('La categoria ya existe');
-        }
-        return this.categoriesRepository.createCategoryRepository(CreateCategoryDto);
+    return category;
+  }
+
+  async create(createCategoryDto: CreateCategoryDto) {
+    const categoryExists =
+      await this.categoriesRepository.findByNameRepository(
+        createCategoryDto.name,
+      );
+    if (categoryExists) {
+      throw new ConflictException('La categoría ya existe');
     }
-     // Servicio para actualizar una categoria
-    async updateCategory(updateCategoryDto: UpdateCategoryDto) {
-    const categoryToUpdate = await this.categoriesRepository.findByIdRepository(
-      updateCategoryDto.id,
+    return this.categoriesRepository.createCategoryRepository(
+      createCategoryDto,
     );
+  }
+
+  async update(id: string, updateCategoryDto: UpdateCategoryDto) {
+    const categoryToUpdate =
+      await this.categoriesRepository.findByIdRepository(id);
     if (!categoryToUpdate) {
-      throw new NotFoundException('La categoria no existe');
+      throw new NotFoundException('La categoría no existe');
     }
     return this.categoriesRepository.updateRepository(
       categoryToUpdate,
       updateCategoryDto,
     );
   }
-  
-        
+
+  async remove(id: string) {
+    const category = await this.categoriesRepository.findByIdRepository(id);
+    if (!category) {
+      throw new NotFoundException('La categoría no existe');
+    }
+    if (!category.isActive) {
+      throw new ConflictException('La categoría ya está desactivada');
+    }
+    return this.categoriesRepository.softDeleteRepository(category);
+  }
 }
