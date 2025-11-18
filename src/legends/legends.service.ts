@@ -22,10 +22,6 @@ export class LegendsService {
     }
 
     async getLegendByTitleService(title: string){
-        const legendExists = await this.legendsRepository.getLegendByTitleRepository(title);
-        if(!legendExists){
-            throw new NotFoundException(`El titulo ${legendExists} no existe`)
-        }
         return this.legendsRepository.getLegendByTitleRepository(title);
     }
 
@@ -39,14 +35,6 @@ export class LegendsService {
     
 
     async createLegendService(createLegendsDto: CreateLegendsDto){
-        const titleExists = await this.legendsRepository.getLegendByTitleRepository(createLegendsDto.title);
-        if(titleExists){
-            throw new ConflictException(`Ya existe un mito o leyenda con este titulo`)
-        }
-        const urlExists = await this.legendsRepository.getLegendByUrlRepository(createLegendsDto.imageUrl);
-        if(urlExists){
-            throw new ConflictException(`Ya existe un mito o leyenda con esta url de imagen`)
-        }
         return this.legendsRepository.createLegendRepository(createLegendsDto);
     }
 
@@ -54,18 +42,6 @@ export class LegendsService {
         const legendExists = await this.legendsRepository.getLegendByIdRepository(updateLegendsDto.uuid);
         if(!legendExists){
             throw new NotFoundException(`La leyenda o mito con el uuid ${updateLegendsDto.uuid} no existe`)
-        }
-        if(updateLegendsDto.imageUrl){
-            const urlExists = await this.legendsRepository.getLegendByUrlRepository(updateLegendsDto.imageUrl)
-            if(urlExists){
-                throw new ConflictException(`La url de la imagen ${updateLegendsDto.imageUrl} ya existe`)
-            }
-            if(updateLegendsDto.title){
-                const titleExists = await this.legendsRepository.getLegendByTitleRepository(updateLegendsDto.title);
-                if(titleExists){
-                    throw new ConflictException(`El titulo ya existe`)
-                }
-            }
         }
         return this.legendsRepository.updateLegendByIdRepository(updateLegendsDto, legendExists);
     }

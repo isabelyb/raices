@@ -29,18 +29,18 @@
   - Acceso: Admin
   - Respuesta: Array de usuarios
 
-- **GET** `/users/:id`
-  - Descripción: Obtener usuario por ID
+- **GET** `/users/:uuid`
+  - Descripción: Obtener usuario por UUID
   - Acceso: Admin o usuario autenticado (su propio perfil)
   - Respuesta: Datos del usuario
 
-- **PUT** `/users/:id`
+- **PUT** `/users/:uuid`
   - Descripción: Actualizar usuario
   - Acceso: Admin o usuario autenticado (su propio perfil)
   - Body: `{ name, email, phone, location }`
   - Respuesta: Usuario actualizado
 
-- **DELETE** `/users/:id`
+- **DELETE** `/users/:uuid`
   - Descripción: Desactivar usuario (soft delete)
   - Acceso: Admin
   - Respuesta: Confirmación
@@ -48,17 +48,17 @@
 
 ## Favoritos
 
-- **GET** `/users/:id/favorites`
+- **GET** `/users/:uuid/favorites`
   - Descripción: Obtener leyendas favoritas del usuario
   - Acceso: Usuario autenticado (su propio perfil) o Admin
   - Respuesta: Array de leyendas favoritas
 
-- **POST** `/users/:id/favorites/:legendId`
+- **POST** `/users/:uuid/favorites/:legendId`
   - Descripción: Agregar leyenda a favoritos
   - Acceso: Usuario autenticado (su propio perfil)
   - Respuesta: Confirmación
 
-- **DELETE** `/users/:id/favorites/:legendId`
+- **DELETE** `/users/:uuid/favorites/:legendId`
   - Descripción: Eliminar leyenda de favoritos
   - Acceso: Usuario autenticado (su propio perfil)
   - Respuesta: Confirmación
@@ -70,27 +70,36 @@
 - **GET** `/legends`
   - Descripción: Listar todas las leyendas activas
   - Acceso: Público
-  - Query params: `?category=uuid&location=uuid&search=texto`
   - Respuesta: Array de leyendas
 
-- **GET** `/legends/:id`
-  - Descripción: Obtener leyenda por ID
+- **GET** `/legends/legendById/:uuid`
+  - Descripción: Obtener leyenda por UUID
   - Acceso: Público
   - Respuesta: Datos completos de la leyenda
 
-- **POST** `/legends`
+- **GET** `/legends/getByTitle/:title`
+  - Descripción: Buscar leyenda por título
+  - Acceso: Público
+  - Respuesta: Leyenda encontrada
+
+- **GET** `/legends/legendByUrl/:url`
+  - Descripción: Buscar leyenda por URL de imagen
+  - Acceso: Público
+  - Respuesta: Leyenda encontrada
+
+- **POST** `/legends/createLegend`
   - Descripción: Crear nueva leyenda
   - Acceso: Admin
   - Body: `{ title, description, story, origin, imageUrl, categoryId, locationId }`
   - Respuesta: Leyenda creada
 
-- **PUT** `/legends/:id`
+- **PUT** `/legends/updateLegends`
   - Descripción: Actualizar leyenda
   - Acceso: Admin
-  - Body: `{ title, description, story, origin, imageUrl, categoryId, locationId }`
+  - Body: `{ uuid, title, description, story, origin, imageUrl, categoryId, locationId }`
   - Respuesta: Leyenda actualizada
 
-- **DELETE** `/legends/:id`
+- **DELETE** `/legends/deleteLegendById/:uuid`
   - Descripción: Desactivar leyenda (soft delete)
   - Acceso: Admin
   - Respuesta: Confirmación
