@@ -6,11 +6,11 @@
 API REST para preservar y difundir mitos, leyendas e historias locales de diferentes regiones de Colombia, promoviendo el turismo cultural. Permite a los usuarios explorar leyendas por categoría, región, y guardar sus favoritas.
 
 ## Integrantes
-- Caro
-- Taty
-- Yuri
-- Isa Y.
-- Isa E.
+- **Carolina Diaz** - Módulo Users (CRUD usuarios + favoritos)
+- **Yuri Rodriguez** - Módulo Credentials (gestión de credenciales y hash de passwords)
+- **Isabel Yepes** - Módulo Auth + Guards  + Seed(autenticación, JWT, guards y decorators)
+- **Isabel Estrada** - Módulo Legends (CRUD leyendas + filtros y búsquedas)
+- **Tatiana Bayona** - Módulo Categories + Locations (CRUD categorías, ubicaciones))
 
 ## Modelo Entidad-Relación (MER)
 
@@ -34,8 +34,7 @@ API REST para preservar y difundir mitos, leyendas e historias locales de difere
 
 1. Clonar el repositorio
 ```bash
-git clone https://github.com/tu-usuario/raices.git
-cd raices
+git clone https://github.com/isabelyb/raices
 ```
 
 2. Instalar dependencias
@@ -45,7 +44,6 @@ npm install
 
 3. Configurar PostgreSQL
 ```bash
-# Crear base de datos
 psql -U postgres
 CREATE DATABASE mitos_db;
 \q
@@ -89,9 +87,7 @@ Esto creará:
 ```bash
 npm run start:dev    # Modo desarrollo con hot-reload
 npm run start:prod   # Modo producción
-npm run build        # Compilar proyecto
 npm run test         # Ejecutar pruebas unitarias
-npm run test:cov     # Pruebas con coverage
 ```
 
 ## Documentación API
@@ -143,3 +139,31 @@ Para la documentación completa con ejemplos de request/response, consulta:
 
 - **USER**: Puede ver leyendas, categorías, ubicaciones y gestionar favoritos
 - **ADMIN**: Acceso completo incluyendo crear, editar y eliminar leyendas
+
+## Pruebas Unitarias
+
+### Pruebas Implementadas
+
+Se implementaron **5 pruebas unitarias** básicas usando Jest para validar el funcionamiento de los módulos principales:
+
+1. **AppController** (1 test)
+   - Verifica que el endpoint raíz devuelve HTML con el nombre del proyecto
+
+2. **AuthService** (2 tests)
+   - Verifica que `signUp()` crea un usuario correctamente
+   - Verifica que `signIn()` devuelve un token JWT válido
+
+3. **LegendsService** (1 test)
+   - Verifica que `getAllLegendsService()` devuelve un array de leyendas
+
+4. **UsersService** (1 test)
+   - Verifica que `findOne()` devuelve un usuario por UUID
+
+### Resultado de la Ejecución
+
+```bash
+npm test
+```
+
+**Resultado:**
+![test](Docs/test.png)
