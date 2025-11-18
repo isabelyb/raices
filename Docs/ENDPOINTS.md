@@ -1,12 +1,19 @@
 # Endpoints API Mitos y Leyendas
 
+## Raíz
+
+- **GET** `/`
+  - Descripción: Página de inicio de la API (HTML con logo y enlace a Swagger)
+  - Acceso: Público
+  - Respuesta: Página HTML con información del proyecto
+
 ## Autenticación
 
 ### Registro e Inicio de Sesión
 - **POST** `/auth/signup`
   - Descripción: Registrar nuevo usuario
   - Acceso: Público
-  - Body: `{ name, email, phone, location, username, password }`
+  - Body: `{ name, email, phone?, location, username, password, confirmPassword }`
   - Respuesta: Usuario creado + credenciales
 
 - **POST** `/auth/signin`
@@ -24,6 +31,12 @@
 ## Usuarios
 
 ### CRUD Usuarios
+- **POST** `/users`
+  - Descripción: Crear nuevo usuario (solo Admin)
+  - Acceso: Admin
+  - Body: `{ name, lastname, phone, email, location, username, password, confirmar_password }`
+  - Respuesta: Usuario creado
+
 - **GET** `/users`
   - Descripción: Listar todos los usuarios
   - Acceso: Admin
@@ -78,14 +91,9 @@
   - Respuesta: Datos completos de la leyenda
 
 - **GET** `/legends/getByTitle/:title`
-  - Descripción: Buscar leyenda por título
+  - Descripción: Buscar leyenda por título (coincidencia parcial, no case-sensitive)
   - Acceso: Público
-  - Respuesta: Leyenda encontrada
-
-- **GET** `/legends/legendByUrl/:url`
-  - Descripción: Buscar leyenda por URL de imagen
-  - Acceso: Público
-  - Respuesta: Leyenda encontrada
+  - Respuesta: Array de leyendas encontradas
 
 - **POST** `/legends/createLegend`
   - Descripción: Crear nueva leyenda
@@ -112,8 +120,8 @@
   - Acceso: Público
   - Respuesta: Array de categorías
 
-- **GET** `/categories/:id`
-  - Descripción: Obtener categoría por ID
+- **GET** `/categories/:uuid`
+  - Descripción: Obtener categoría por UUID
   - Acceso: Público
   - Respuesta: Datos de la categoría
 
@@ -123,13 +131,13 @@
   - Body: `{ name, description }`
   - Respuesta: Categoría creada
 
-- **PUT** `/categories/:id`
+- **PUT** `/categories/:uuid`
   - Descripción: Actualizar categoría
   - Acceso: Admin
   - Body: `{ name, description }`
   - Respuesta: Categoría actualizada
 
-- **DELETE** `/categories/:id`
+- **DELETE** `/categories/:uuid`
   - Descripción: Desactivar categoría (soft delete)
   - Acceso: Admin
   - Respuesta: Confirmación
@@ -142,12 +150,12 @@
   - Acceso: Público
   - Respuesta: Array de ubicaciones
 
-- **GET** `/locations/:id`
-  - Descripción: Obtener ubicación por ID
+- **GET** `/locations/:uuid`
+  - Descripción: Obtener ubicación por UUID
   - Acceso: Público
   - Respuesta: Datos de la ubicación
 
-- **GET** `/locations/:id/legends`
+- **GET** `/locations/:uuid/legends`
   - Descripción: Obtener todas las leyendas de una ubicación
   - Acceso: Público
   - Respuesta: Array de leyendas
@@ -158,13 +166,13 @@
   - Body: `{ name, department, touristInfo }`
   - Respuesta: Ubicación creada
 
-- **PUT** `/locations/:id`
+- **PUT** `/locations/:uuid`
   - Descripción: Actualizar ubicación
   - Acceso: Admin
   - Body: `{ name, department, touristInfo }`
   - Respuesta: Ubicación actualizada
 
-- **DELETE** `/locations/:id`
+- **DELETE** `/locations/:uuid`
   - Descripción: Desactivar ubicación (soft delete)
   - Acceso: Admin
   - Respuesta: Confirmación
