@@ -38,20 +38,23 @@ export class LegendsRepository{
             relations: ['category', 'location']
         })
     }
-    /*async createLegendRepository(createLegendsDto: CreateLegendsDto){
-        return this.legendsDataBase.create({
+    async createLegendRepository(createLegendsDto: CreateLegendsDto){
+        const newLegend = this.legendsDataBase.create({
             title: createLegendsDto.title,
             description: createLegendsDto.description,
             imageUrl: createLegendsDto.imageUrl,
             story: createLegendsDto.story,
             origin: createLegendsDto.origin,
             createdAt: createLegendsDto.createdAt,
-            category: createLegendsDto.category
-        })
-    }*/
+            category: { uuid: createLegendsDto.category },
+            location: { uuid: createLegendsDto.location }
+        });
+        await this.legendsDataBase.save(newLegend);
+        return { message: 'Leyenda creada exitosamente', legend: newLegend };
+    }
 
         
-    /*async updateLegendByIdRepository(updateLegendsDto: UpdateLegendsDto, legendExists: Legends){
+    async updateLegendByIdRepository(updateLegendsDto: UpdateLegendsDto, legendExists: Legends){
         if(updateLegendsDto.title){
             legendExists.title = updateLegendsDto.title;
         }
@@ -77,16 +80,16 @@ export class LegendsRepository{
         }
 
         if(updateLegendsDto.category){
-            legendExists.category = 
+            legendExists.category = { uuid: updateLegendsDto.category } as any;
         }
 
         if(updateLegendsDto.location){
-            legendExists.location = 
+            legendExists.location = { uuid: updateLegendsDto.location } as any;
         }
             
         await this.legendsDataBase.save(legendExists);
-        return {message: `El mito o leyenda fue actualizado exitosamente`}
-    }*/
+        return {message: `El mito o leyenda fue actualizado exitosamente`};
+    }
 
     async daleteLegendByIdRepository(legendExists: Legends){
         legendExists.isActive = false;

@@ -46,11 +46,12 @@ export class Legends{
         type: 'boolean',
         default: true
     })
-    isActive: boolean; // Consistente con otras entities
+    isActive: boolean; 
 
     @Column({
     type: 'timestamp',
     nullable: false,
+    default: () => 'CURRENT_TIMESTAMP',
     })
     createdAt: Date;
 

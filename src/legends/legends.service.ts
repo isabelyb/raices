@@ -38,7 +38,7 @@ export class LegendsService {
     }
     
 
-    /*async createLegendService(createLegendsDto: CreateLegendsDto){
+    async createLegendService(createLegendsDto: CreateLegendsDto){
         const titleExists = await this.legendsRepository.getLegendByTitleRepository(createLegendsDto.title);
         if(titleExists){
             throw new ConflictException(`Ya existe un mito o leyenda con este titulo`)
@@ -48,9 +48,9 @@ export class LegendsService {
             throw new ConflictException(`Ya existe un mito o leyenda con esta url de imagen`)
         }
         return this.legendsRepository.createLegendRepository(createLegendsDto);
-    }*/
+    }
 
-    /*async updateLegendByIdService(updateLegendsDto: UpdateLegendsDto){
+    async updateLegendByIdService(updateLegendsDto: UpdateLegendsDto){
         const legendExists = await this.legendsRepository.getLegendByIdRepository(updateLegendsDto.uuid);
         if(!legendExists){
             throw new NotFoundException(`La leyenda o mito con el uuid ${updateLegendsDto.uuid} no existe`)
@@ -68,7 +68,7 @@ export class LegendsService {
             }
         }
         return this.legendsRepository.updateLegendByIdRepository(updateLegendsDto, legendExists);
-    }*/
+    }
 
     async daleteLegendByIdService(uuid: string){
         const legendExists = await this.legendsRepository.getLegendByIdRepository(uuid);
