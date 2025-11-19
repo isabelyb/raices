@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 import { CreateUserDto } from './Dto/create-user.dto';
 import { UpdateUserDto } from './Dto/update-user.dto';
@@ -42,9 +42,11 @@ export class UsersService {
 
   // SOFT DELETE
   async softDelete(uuid: string) {
-    await this.findOne(uuid);
-    await this.usersRepo.softDelete({ uuid });
-    return { message: 'User soft-deleted successfully' };
+    const user = await this.findOne(uuid);
+    if (!user.isActive) {
+      throw new ConflictException('El usuario ya está desactivado');
+    }
+    return this.usersRepo.softDeleteRepository(user);
   }
 
   // FAVORITES - GET

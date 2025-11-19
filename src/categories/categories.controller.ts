@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   UseGuards,
@@ -44,10 +45,14 @@ export class CategoriesController {
     description: 'Categoría encontrada',
   })
   @ApiResponse({
+    status: 400,
+    description: 'UUID inválido',
+  })
+  @ApiResponse({
     status: 404,
     description: 'Categoría no encontrada',
   })
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.categoriesService.findOne(id);
   }
 
@@ -78,10 +83,14 @@ export class CategoriesController {
     description: 'Categoría actualizada exitosamente',
   })
   @ApiResponse({
+    status: 400,
+    description: 'UUID inválido',
+  })
+  @ApiResponse({
     status: 404,
     description: 'Categoría no encontrada',
   })
-  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
     return this.categoriesService.update(id, updateCategoryDto);
   }
 
@@ -95,10 +104,14 @@ export class CategoriesController {
     description: 'Categoría desactivada exitosamente',
   })
   @ApiResponse({
+    status: 400,
+    description: 'UUID inválido',
+  })
+  @ApiResponse({
     status: 404,
     description: 'Categoría no encontrada',
   })
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.categoriesService.remove(id);
   }
 }

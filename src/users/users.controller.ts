@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Delete, Post, Param, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Put, Delete, Post, Param, Body, UseGuards, ParseUUIDPipe } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './Dto/update-user.dto';
@@ -38,8 +38,9 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Obtener usuario por UUID' })
   @ApiResponse({ status: 200, description: 'Usuario encontrado' })
+  @ApiResponse({ status: 400, description: 'UUID inválido' })
   @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
-  findOne(@Param('uuid') uuid: string) {
+  findOne(@Param('uuid', ParseUUIDPipe) uuid: string) {
     return this.usersService.findOne(uuid);
   }
 
@@ -48,7 +49,9 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Actualizar usuario' })
   @ApiResponse({ status: 200, description: 'Usuario actualizado' })
-  update(@Param('uuid') uuid: string, @Body() dto: UpdateUserDto) {
+  @ApiResponse({ status: 400, description: 'UUID inválido' })
+  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
+  update(@Param('uuid', ParseUUIDPipe) uuid: string, @Body() dto: UpdateUserDto) {
     return this.usersService.update(uuid, dto);
   }
 
@@ -58,7 +61,9 @@ export class UsersController {
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Desactivar usuario (solo Admin)' })
   @ApiResponse({ status: 200, description: 'Usuario desactivado' })
-  remove(@Param('uuid') uuid: string) {
+  @ApiResponse({ status: 400, description: 'UUID inválido' })
+  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
+  remove(@Param('uuid', ParseUUIDPipe) uuid: string) {
     return this.usersService.softDelete(uuid);
   }
 
@@ -67,7 +72,9 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Obtener favoritos del usuario' })
   @ApiResponse({ status: 200, description: 'Lista de leyendas favoritas' })
-  getFavorites(@Param('uuid') uuid: string) {
+  @ApiResponse({ status: 400, description: 'UUID inválido' })
+  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
+  getFavorites(@Param('uuid', ParseUUIDPipe) uuid: string) {
     return this.usersService.getFavorites(uuid);
   }
 
@@ -76,7 +83,9 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Agregar leyenda a favoritos' })
   @ApiResponse({ status: 200, description: 'Leyenda agregada a favoritos' })
-  addFavorite(@Param('uuid') uuid: string, @Param('legendId') legendId: string) {
+  @ApiResponse({ status: 400, description: 'UUID inválido' })
+  @ApiResponse({ status: 404, description: 'Usuario o leyenda no encontrado' })
+  addFavorite(@Param('uuid', ParseUUIDPipe) uuid: string, @Param('legendId', ParseUUIDPipe) legendId: string) {
     return this.usersService.addFavorite(uuid, legendId);
   }
 
@@ -85,9 +94,11 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Eliminar leyenda de favoritos' })
   @ApiResponse({ status: 200, description: 'Leyenda eliminada de favoritos' })
+  @ApiResponse({ status: 400, description: 'UUID inválido' })
+  @ApiResponse({ status: 404, description: 'Usuario o leyenda no encontrado' })
   removeFavorite(
-    @Param('uuid') uuid: string,
-    @Param('legendId') legendId: string,
+    @Param('uuid', ParseUUIDPipe) uuid: string,
+    @Param('legendId', ParseUUIDPipe) legendId: string,
   ) {
     return this.usersService.removeFavorite(uuid, legendId);
   }
