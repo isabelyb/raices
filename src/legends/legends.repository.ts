@@ -1,9 +1,11 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import {Legends} from "../entities/legends.entity";
 import { Repository, ILike } from "typeorm";
 import {CreateLegendsDto} from './Dto/createLegends.dto';
 import {UpdateLegendsDto} from './Dto/updateLegends.dto';
+import { Categories } from "../entities/categories.entity";
+import { Locations } from "../entities/locations.entity";
 
 
 @Injectable()
@@ -11,7 +13,10 @@ export class LegendsRepository{
     constructor(
         @InjectRepository(Legends)
         private readonly legendsDataBase: Repository<Legends>,
-        
+        @InjectRepository(Categories)
+        private readonly categoriesDataBase: Repository<Categories>,
+        @InjectRepository(Locations)
+        private readonly locationsDataBase: Repository<Locations>,
     ){}
 
     async getAllLegendsRepository(){
@@ -32,6 +37,13 @@ export class LegendsRepository{
         })
     }
 
+    async getLegendByTitleExact(title: string){
+        return this.legendsDataBase.findOne({
+            where: {title: title},
+            relations: ['category', 'location']
+        })
+    }
+
     async getLegendByUrlRepository(url: string){
         return this.legendsDataBase.findOne({
             where: {imageUrl: url},
@@ -39,13 +51,19 @@ export class LegendsRepository{
         })
     }
     async createLegendRepository(createLegendsDto: CreateLegendsDto){
+        let createdAtDate: Date | undefined;
+        if (createLegendsDto.createdAt && typeof createLegendsDto.createdAt === 'string') {
+            const [day, month, year] = createLegendsDto.createdAt.split('/');
+            createdAtDate = new Date(`${year}-${month}-${day}`);
+        }
+        
         const newLegend = this.legendsDataBase.create({
             title: createLegendsDto.title,
             description: createLegendsDto.description,
             imageUrl: createLegendsDto.imageUrl,
             story: createLegendsDto.story,
             origin: createLegendsDto.origin,
-            createdAt: createLegendsDto.createdAt,
+            createdAt: createdAtDate,
             category: { uuid: createLegendsDto.category },
             location: { uuid: createLegendsDto.location }
         });
@@ -72,18 +90,31 @@ export class LegendsRepository{
         }
 
         if(updateLegendsDto.createdAt){
-            legendExists.createdAt = updateLegendsDto.createdAt;
+            if (typeof updateLegendsDto.createdAt === 'string') {
+                const [day, month, year] = updateLegendsDto.createdAt.split('/');
+                legendExists.createdAt = new Date(`${year}-${month}-${day}`);
+            } else {
+                legendExists.createdAt = updateLegendsDto.createdAt;
+            }
         }
 
         if(updateLegendsDto.story){
             legendExists.story = updateLegendsDto.story;
         }
 
-        if(updateLegendsDto.category){
+        if(updateLegendsDto.category && updateLegendsDto.category !== legendExists.category?.uuid){
+            const categoryExists = await this.categoriesDataBase.findOne({ where: { uuid: updateLegendsDto.category } });
+            if(!categoryExists){
+                throw new NotFoundException(`La categoría con uuid ${updateLegendsDto.category} no existe`);
+            }
             legendExists.category = { uuid: updateLegendsDto.category } as any;
         }
 
-        if(updateLegendsDto.location){
+        if(updateLegendsDto.location && updateLegendsDto.location !== legendExists.location?.uuid){
+            const locationExists = await this.locationsDataBase.findOne({ where: { uuid: updateLegendsDto.location } });
+            if(!locationExists){
+                throw new NotFoundException(`La ubicación con uuid ${updateLegendsDto.location} no existe`);
+            }
             legendExists.location = { uuid: updateLegendsDto.location } as any;
         }
             

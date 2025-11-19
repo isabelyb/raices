@@ -32,4 +32,10 @@ export class UsersRepository extends Repository<User> {
     const user = this.create(userData);
     return await this.save(user);
   }
+
+  async softDeleteRepository(user: User) {
+    user.isActive = false;
+    await this.save(user);
+    return { message: 'Usuario desactivado exitosamente' };
+  }
 }

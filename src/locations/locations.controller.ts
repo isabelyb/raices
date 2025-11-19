@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   UseGuards,
@@ -44,10 +45,14 @@ export class LocationsController {
     description: 'Ubicación encontrada',
   })
   @ApiResponse({
+    status: 400,
+    description: 'UUID inválido',
+  })
+  @ApiResponse({
     status: 404,
     description: 'Ubicación no encontrada',
   })
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.locationsService.findOne(id);
   }
 
@@ -58,10 +63,14 @@ export class LocationsController {
     description: 'Leyendas de la ubicación obtenidas',
   })
   @ApiResponse({
+    status: 400,
+    description: 'UUID inválido',
+  })
+  @ApiResponse({
     status: 404,
     description: 'Ubicación no encontrada',
   })
-  getLegendsFromLocation(@Param('id') id: string) {
+  getLegendsFromLocation(@Param('id', ParseUUIDPipe) id: string) {
     return this.locationsService.getLegendsFromLocation(id);
   }
 
@@ -92,10 +101,14 @@ export class LocationsController {
     description: 'Ubicación actualizada exitosamente',
   })
   @ApiResponse({
+    status: 400,
+    description: 'UUID inválido',
+  })
+  @ApiResponse({
     status: 404,
     description: 'Ubicación no encontrada',
   })
-  update(@Param('id') id: string, @Body() updateLocationDto: UpdateLocationDto) {
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateLocationDto: UpdateLocationDto) {
     return this.locationsService.update(id, updateLocationDto);
   }
 
@@ -109,10 +122,14 @@ export class LocationsController {
     description: 'Ubicación desactivada exitosamente',
   })
   @ApiResponse({
+    status: 400,
+    description: 'UUID inválido',
+  })
+  @ApiResponse({
     status: 404,
     description: 'Ubicación no encontrada',
   })
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.locationsService.remove(id);
   }
 }

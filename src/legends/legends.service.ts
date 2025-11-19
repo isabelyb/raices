@@ -38,11 +38,28 @@ export class LegendsService {
         return this.legendsRepository.createLegendRepository(createLegendsDto);
     }
 
-    async updateLegendByIdService(updateLegendsDto: UpdateLegendsDto){
-        const legendExists = await this.legendsRepository.getLegendByIdRepository(updateLegendsDto.uuid);
+    async updateLegendByIdService(uuid: string, updateLegendsDto: UpdateLegendsDto){
+        const legendExists = await this.legendsRepository.getLegendByIdRepository(uuid);
         if(!legendExists){
-            throw new NotFoundException(`La leyenda o mito con el uuid ${updateLegendsDto.uuid} no existe`)
+            throw new NotFoundException(`La leyenda o mito con el uuid ${uuid} no existe`)
         }
+
+        // Validar que el title no esté en uso por otra leyenda (solo si el title cambió)
+        if(updateLegendsDto.title && updateLegendsDto.title !== legendExists.title){
+            const existingLegend = await this.legendsRepository.getLegendByTitleExact(updateLegendsDto.title);
+            if(existingLegend && existingLegend.uuid !== uuid){
+                throw new ConflictException('El título ya está en uso por otra leyenda');
+            }
+        }
+
+        // Validar que el imageUrl no esté en uso por otra leyenda (solo si el imageUrl cambió)
+        if(updateLegendsDto.imageUrl && updateLegendsDto.imageUrl !== legendExists.imageUrl){
+            const existingLegend = await this.legendsRepository.getLegendByUrlRepository(updateLegendsDto.imageUrl);
+            if(existingLegend && existingLegend.uuid !== uuid){
+                throw new ConflictException('La URL de imagen ya está en uso por otra leyenda');
+            }
+        }
+
         return this.legendsRepository.updateLegendByIdRepository(updateLegendsDto, legendExists);
     }
 
