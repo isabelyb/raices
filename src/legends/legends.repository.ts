@@ -37,6 +37,13 @@ export class LegendsRepository{
         })
     }
 
+    async getLegendByTitleExact(title: string){
+        return this.legendsDataBase.findOne({
+            where: {title: title},
+            relations: ['category', 'location']
+        })
+    }
+
     async getLegendByUrlRepository(url: string){
         return this.legendsDataBase.findOne({
             where: {imageUrl: url},
