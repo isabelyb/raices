@@ -38,10 +38,10 @@ export class LegendsService {
         return this.legendsRepository.createLegendRepository(createLegendsDto);
     }
 
-    async updateLegendByIdService(updateLegendsDto: UpdateLegendsDto){
-        const legendExists = await this.legendsRepository.getLegendByIdRepository(updateLegendsDto.uuid);
+    async updateLegendByIdService(uuid: string, updateLegendsDto: UpdateLegendsDto){
+        const legendExists = await this.legendsRepository.getLegendByIdRepository(uuid);
         if(!legendExists){
-            throw new NotFoundException(`La leyenda o mito con el uuid ${updateLegendsDto.uuid} no existe`)
+            throw new NotFoundException(`La leyenda o mito con el uuid ${uuid} no existe`)
         }
         return this.legendsRepository.updateLegendByIdRepository(updateLegendsDto, legendExists);
     }

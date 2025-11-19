@@ -1,5 +1,5 @@
 import { Controller, Get, Param, ParseUUIDPipe, Post, Body, Put, Delete, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
 import {LegendsService} from './legends.service';
 import {CreateLegendsDto } from './Dto/createLegends.dto';
 import {UpdateLegendsDto} from './Dto/updateLegends.dto';
@@ -58,17 +58,19 @@ export class LegendsController {
         return this.legendsService.createLegendService(createLegendsDto);
     }
 
-    @ApiOperation({ summary: 'Actualizar leyenda (solo ADMIN)' })
-    @ApiResponse({ status: 200, description: 'Leyenda actualizada exitosamente' })
-    @ApiResponse({ status: 404, description: 'Leyenda no encontrada' })
-    @ApiResponse({ status: 409, description: 'El título o URL ya existe' })
-    @ApiResponse({ status: 401, description: 'No autorizado' })
+    @Put(':uuid')
     @ApiBearerAuth()
     @UseGuards(AuthGuard, RolesGuard)
     @Roles(Role.ADMIN)
-    @Put('updateLegends')
-    updateLegendByIdController(@Body() updateLegendsDto: UpdateLegendsDto){
-        return this.legendsService.updateLegendByIdService(updateLegendsDto);
+    @ApiOperation({ summary: 'Actualizar leyenda (solo ADMIN)' })
+    @ApiParam({ name: 'uuid', description: 'UUID de la leyenda a actualizar', type: 'string', format: 'uuid' })
+    @ApiResponse({ status: 200, description: 'Leyenda actualizada exitosamente' })
+    @ApiResponse({ status: 400, description: 'UUID inválido' })
+    @ApiResponse({ status: 404, description: 'Leyenda no encontrada' })
+    @ApiResponse({ status: 409, description: 'El título o URL ya existe' })
+    @ApiResponse({ status: 401, description: 'No autorizado' })
+    updateLegendByIdController(@Param('uuid', ParseUUIDPipe) uuid: string, @Body() updateLegendsDto: UpdateLegendsDto){
+        return this.legendsService.updateLegendByIdService(uuid, updateLegendsDto);
     }
 
     @ApiOperation({ summary: 'Eliminar leyenda (soft delete - solo ADMIN)' })

@@ -49,8 +49,8 @@ export class CreateLegendsDto{
     })
     @IsNotEmpty({message: `Este campo no puede estar vacío`})
     @IsString({message: `Este campo debe de ser texto`})
-    @Matches(/^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$/, {
-    message: 'Solo se permiten letras y espacios'
+    @Matches(/^[A-Za-zÁÉÍÓÚáéíóúÑñ ,]+$/, {
+    message: 'Solo se permiten letras, espacios y comas'
     })
     @Length(3, 100,{message: `El origen debe tener entre 3 y 100 caracteres` })
     origin: string;
@@ -61,14 +61,11 @@ export class CreateLegendsDto{
         required: false,
     })
     @IsOptional()
+    @IsString()
     @Matches(/^\d{2}\/\d{2}\/\d{4}$/, {
     message: 'El formato debe ser DD/MM/YYYY',
     })
-    @Transform(({ value }) => {
-    const [day, month, year] = value.split('/');
-    return new Date(`${year}-${month}-${day}`);
-    })
-    createdAt?: Date;
+    createdAt?: string;
 
     @ApiProperty({
         description: 'UUID de la categoría asociada',
