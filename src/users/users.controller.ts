@@ -19,6 +19,7 @@ export class UsersController {
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Crear usuario (solo Admin)' })
   @ApiResponse({ status: 201, description: 'Usuario creado' })
+  @ApiResponse({ status: 409, description: 'El email ya está registrado' })
   create(@Body() dto: CreateUserDto) {
     return this.usersService.create(dto);
   }
@@ -51,6 +52,7 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Usuario actualizado' })
   @ApiResponse({ status: 400, description: 'UUID inválido' })
   @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
+  @ApiResponse({ status: 409, description: 'El email ya está registrado' })
   update(@Param('uuid', ParseUUIDPipe) uuid: string, @Body() dto: UpdateUserDto) {
     return this.usersService.update(uuid, dto);
   }

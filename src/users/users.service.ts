@@ -17,6 +17,10 @@ export class UsersService {
 
   // CREATE
   async create(dto: CreateUserDto) {
+    const existingUser = await this.usersRepo.getUserByEmail(dto.email.trim().toLowerCase());
+    if (existingUser) {
+      throw new ConflictException('El email ya está registrado');
+    }
     const user = this.usersRepo.create(dto);
     return await this.usersRepo.save(user);
   }
@@ -36,6 +40,23 @@ export class UsersService {
   // UPDATE
   async update(uuid: string, dto: UpdateUserDto) {
     const user = await this.findOne(uuid);
+
+    // Validar que el email no esté en uso por otro usuario (solo si el email cambió)
+    if (dto.email) {
+      const newEmail = dto.email.trim().toLowerCase();
+      const currentEmail = (user.email || '').trim().toLowerCase();
+
+      // Solo validar si el email realmente cambió
+      if (newEmail !== currentEmail) {
+        const existingUser = await this.usersRepo.getUserByEmail(dto.email.trim().toLowerCase());
+        // Si existe otro usuario con ese email (no el actual), lanzar error
+        if (existingUser && existingUser.uuid !== user.uuid) {
+          throw new ConflictException('El email ya está registrado');
+        }
+      }
+      // Si el email es el mismo, no hacer nada (permitir actualizar otros campos)
+    }
+
     Object.assign(user, dto);
     return await this.usersRepo.save(user);
   }
