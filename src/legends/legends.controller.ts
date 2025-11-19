@@ -8,7 +8,7 @@ import { RolesGuard } from 'src/auth/Guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enums/roles.enum';
 
-@ApiTags('Legends')
+@ApiTags('Leyendas')
 @Controller('legends')
 export class LegendsController {
     constructor(
