@@ -33,7 +33,7 @@ export class UsersService {
   // FIND ONE
   async findOne(uuid: string) {
     const user = await this.usersRepo.findUserByUuid(uuid);
-    if (!user) throw new NotFoundException(`User with id ${uuid} not found`);
+    if (!user) throw new NotFoundException(`Usuario con id ${uuid} no encontrado`);
     return user;
   }
 
@@ -84,7 +84,7 @@ export class UsersService {
       where: { uuid: legendId },
     });
 
-    if (!legend) throw new NotFoundException('Legend not found');
+    if (!legend) throw new NotFoundException('Leyenda no encontrada');
 
     user.favorites.push(legend);
     return await this.usersRepo.save(user);
@@ -97,6 +97,6 @@ export class UsersService {
     user.favorites = user.favorites.filter(f => f.uuid !== legendId);
 
     await this.usersRepo.save(user);
-    return { message: 'Favorite removed successfully' };
+    return { message: 'Favorito eliminado exitosamente' };
   }
 }

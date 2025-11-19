@@ -9,8 +9,8 @@ export class CreateUserDto {
     example: 'María',
     maxLength: 100,
   })
-  @IsString()
-  @MaxLength(100)
+  @IsString({ message: 'El nombre debe ser una cadena de texto' })
+  @MaxLength(100, { message: 'El nombre no puede exceder 100 caracteres' })
   name: string;
 
   @ApiProperty({
@@ -18,8 +18,8 @@ export class CreateUserDto {
     example: 'Rodríguez',
     maxLength: 100,
   })
-  @IsString()
-  @MaxLength(100)
+  @IsString({ message: 'El apellido debe ser una cadena de texto' })
+  @MaxLength(100, { message: 'El apellido no puede exceder 100 caracteres' })
   lastname: string;
 
   @ApiProperty({
@@ -27,8 +27,8 @@ export class CreateUserDto {
     example: '3001234567',
     maxLength: 15,
   })
-  @IsString()
-  @MaxLength(15)
+  @IsString({ message: 'El teléfono debe ser una cadena de texto' })
+  @MaxLength(15, { message: 'El teléfono no puede exceder 15 caracteres' })
   phone: string;
 
   @ApiProperty({
@@ -36,8 +36,8 @@ export class CreateUserDto {
     example: 'maria@example.com',
     maxLength: 150,
   })
-  @IsEmail()
-  @MaxLength(150)
+  @IsEmail({}, { message: 'El email debe tener un formato válido' })
+  @MaxLength(150, { message: 'El email no puede exceder 150 caracteres' })
   email: string;
 
   @ApiProperty({
@@ -45,8 +45,8 @@ export class CreateUserDto {
     example: 'Bogotá, Colombia',
     maxLength: 150,
   })
-  @IsString()
-  @MaxLength(150)
+  @IsString({ message: 'La ubicación debe ser una cadena de texto' })
+  @MaxLength(150, { message: 'La ubicación no puede exceder 150 caracteres' })
   location: string;
 
   @ApiProperty({
@@ -55,7 +55,7 @@ export class CreateUserDto {
     required: false,
     default: true,
   })
-  @IsBoolean()
+  @IsBoolean({ message: 'El estado activo debe ser un valor booleano' })
   isActive?: boolean;
   
   @ApiProperty({

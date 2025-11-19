@@ -26,6 +26,7 @@ export class LegendsController {
     @ApiResponse({ status: 200, description: 'Leyenda encontrada' })
     @ApiResponse({ status: 404, description: 'Leyenda no encontrada' })
     @Get('legendById/:uuid')
+    @ApiParam({ name: 'uuid', description: 'UUID de la leyenda', type: 'string', format: 'uuid', example: 'cb4efd09-1a9e-49d3-8974-a26a02f16165' })
     getLegendByIdController(@Param('uuid', ParseUUIDPipe)uuid: string){
         return this.legendsService.getLegendByIdService(uuid);
     }
@@ -34,6 +35,7 @@ export class LegendsController {
     @ApiResponse({ status: 200, description: 'Leyenda encontrada' })
     @ApiResponse({ status: 404, description: 'Leyenda no encontrada' })
     @Get('getByTitle/:title')
+    @ApiParam({ name: 'title', description: 'Título de la leyenda a buscar', type: 'string', example: 'La Patasola' })
     getLegendByTitleController(@Param('title')title: string){
         return this.legendsService.getLegendByTitleService(title);
     }
@@ -42,6 +44,7 @@ export class LegendsController {
     @ApiResponse({ status: 200, description: 'Leyenda encontrada' })
     @ApiResponse({ status: 404, description: 'Leyenda no encontrada' })
     @Get('legendByUrl/:url')
+    @ApiParam({ name: 'url', description: 'URL de la imagen de la leyenda', type: 'string', example: 'https://res.cloudinary.com/example/image.jpg' })
     getLegendByUrlController(@Param('url')url: string){
         return this.legendsService.getLegendByUrlService(url);
     }
@@ -63,7 +66,7 @@ export class LegendsController {
     @UseGuards(AuthGuard, RolesGuard)
     @Roles(Role.ADMIN)
     @ApiOperation({ summary: 'Actualizar leyenda (solo ADMIN)' })
-    @ApiParam({ name: 'uuid', description: 'UUID de la leyenda a actualizar', type: 'string', format: 'uuid' })
+    @ApiParam({ name: 'uuid', description: 'UUID de la leyenda a actualizar', type: 'string', format: 'uuid', example: 'cb4efd09-1a9e-49d3-8974-a26a02f16165' })
     @ApiResponse({ status: 200, description: 'Leyenda actualizada exitosamente' })
     @ApiResponse({ status: 400, description: 'UUID inválido' })
     @ApiResponse({ status: 404, description: 'Leyenda no encontrada' })
@@ -82,6 +85,7 @@ export class LegendsController {
     @UseGuards(AuthGuard, RolesGuard)
     @Roles(Role.ADMIN)
     @Delete('deleteLegendById/:uuid')
+    @ApiParam({ name: 'uuid', description: 'UUID de la leyenda a eliminar', type: 'string', format: 'uuid', example: 'cb4efd09-1a9e-49d3-8974-a26a02f16165' })
     daleteLegendByIdController(@Param('uuid', ParseUUIDPipe)uuid:string){
         return this.legendsService.daleteLegendByIdService(uuid);
     }
