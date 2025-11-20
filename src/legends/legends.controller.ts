@@ -26,7 +26,7 @@ export class LegendsController {
     @ApiResponse({ status: 200, description: 'Leyenda encontrada' })
     @ApiResponse({ status: 404, description: 'Leyenda no encontrada' })
     @Get('legendById/:uuid')
-    @ApiParam({ name: 'uuid', description: 'UUID de la leyenda', type: 'string', format: 'uuid', example: 'cb4efd09-1a9e-49d3-8974-a26a02f16165' })
+    //@ApiParam({ name: 'uuid', description: 'UUID de la leyenda', type: 'string', format: 'uuid', example: 'cb4efd09-1a9e-49d3-8974-a26a02f16165' })
     getLegendByIdController(@Param('uuid', ParseUUIDPipe)uuid: string){
         return this.legendsService.getLegendByIdService(uuid);
     }
