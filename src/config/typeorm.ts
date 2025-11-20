@@ -13,9 +13,9 @@ const config: DataSourceOptions = {
   password: process.env.DB_PASSWORD,
   entities: ['dist/**/*.entity.js'],
   migrations: ['dist/migrations/*.js'],
-  logging: false,
-  synchronize: true, // ⚠️ Solo para desarrollo - TypeORM crea/actualiza tablas automáticamente
-  dropSchema: false,
+  logging: true,
+  synchronize: true,
+  dropSchema: true,
   migrationsTableName: 'migrations_history',
 };
 export default registerAs('typeorm', () => config);

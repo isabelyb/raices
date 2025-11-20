@@ -1,0 +1,44 @@
+# Dependencias
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Build output (se genera en el contenedor)
+dist
+
+# Git
+.git
+.gitignore
+
+# Archivos de entorno (se configuran en Render)
+.env
+.env.development
+.env.production
+.env.local
+
+# Archivos de test
+coverage
+.nyc_output
+test
+
+# Archivos de desarrollo
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Documentación
+Docs
+README.md
+
+# Archivos temporales
+*.log
+*.tmp
+.DS_Store
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
